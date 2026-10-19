@@ -1,0 +1,162 @@
+/* ==========================================================================
+   Lingo Studio — base layer
+   Design direction: 印刷工坊 / Editorial workshop.
+   暖纸底 + 墨色字 + 朱砂/靛蓝/翡翠三语强调色 + 极细分割线 + 轻微纸纹颗粒。
+   ========================================================================== */
+
+:root {
+  /* --- 纸张与墨色 --- */
+  --paper:        #F5EFE4;
+  --paper-raise:  #FBF8F1;
+  --paper-sunken: #EBE3D4;
+  --ink:          #191510;
+  --ink-2:        #443B2F;
+  --ink-3:        #736856;
+  --ink-4:        #9C917C;
+  --line:         rgba(25, 21, 16, 0.14);
+  --line-soft:    rgba(25, 21, 16, 0.07);
+  --line-bold:    rgba(25, 21, 16, 0.28);
+
+  /* --- 三语强调色 --- */
+  --en:      #2C4FD6;   /* 靛蓝  */
+  --en-soft: #E4E9FB;
+  --ja:      #D2481C;   /* 朱砂  */
+  --ja-soft: #FBE7DF;
+  --ko:      #0E8060;   /* 翡翠  */
+  --ko-soft: #DDF0E8;
+
+  --accent:    #D2481C;
+  --accent-2:  #2C4FD6;
+  --gold:      #B98A2B;
+  --gold-soft: #F6ECD6;
+  --ok:        #0E8060;
+  --warn:      #B9591F;
+  --err:       #C0392B;
+
+  /* --- 深色横梁（左侧导航） --- */
+  --rail-bg:   #17130F;
+  --rail-ink:  #EDE5D8;
+  --rail-mute: #8D8577;
+
+  /* --- 结构 --- */
+  --rail-w: 244px;
+  --topbar-h: 68px;
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-pill: 999px;
+
+  --shadow-1: 0 1px 0 rgba(25,21,16,.05), 0 6px 18px -12px rgba(25,21,16,.35);
+  --shadow-2: 4px 5px 0 rgba(25,21,16,.9);
+  --shadow-soft: 0 18px 40px -28px rgba(25,21,16,.55);
+
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --ease-out-back: cubic-bezier(.34,1.56,.64,1);
+
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Songti SC", serif;
+  --font-body: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* ---------- 纸纹颗粒（全局氛围层） ---------- */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .5;
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(210,72,28,.055), transparent 42%),
+    radial-gradient(circle at 84% 78%, rgba(44,79,214,.055), transparent 46%),
+    radial-gradient(circle at 62% 34%, rgba(14,128,96,.04), transparent 40%);
+  mix-blend-mode: multiply;
+}
+
+/* ---------- reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1,h2,h3,h4,h5 { margin: 0; font-family: var(--font-display); font-weight: 600; letter-spacing: -.015em; line-height: 1.12; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: none; background: none; }
+img, svg { display: block; max-width: 100%; }
+hr { border: none; border-top: 1px solid var(--line); margin: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+::selection { background: var(--gold-soft); color: var(--ink); }
+
+/* ---------- 排版语汇 ---------- */
+.display-xl { font-family: var(--font-display); font-size: clamp(2.6rem, 5.6vw, 4.6rem); font-weight: 900; letter-spacing: -.035em; line-height: .98; }
+.display-l  { font-family: var(--font-display); font-size: clamp(1.9rem, 3.4vw, 2.9rem); font-weight: 700; letter-spacing: -.03em; line-height: 1.04; }
+.display-m  { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; letter-spacing: -.02em; }
+.serif-italic { font-family: var(--font-display); font-style: italic; font-weight: 400; }
+.mono { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-4); }
+.mono-plain { font-family: var(--font-mono); font-size: .78rem; letter-spacing: .02em; }
+.lede { font-size: 1.02rem; color: var(--ink-2); line-height: 1.65; }
+.dim { color: var(--ink-3); }
+.tiny { font-size: .78rem; }
+
+.kicker {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--font-mono); font-size: .68rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+.kicker::before { content: ""; width: 22px; height: 1px; background: var(--accent); }
+
+.rule { height: 1px; background: var(--line); }
+.rule-dotted { height: 0; border-top: 1px dashed var(--line); }
+
+/* ---------- 工具类 ---------- */
+.row { display: flex; align-items: center; }
+.col { display: flex; flex-direction: column; }
+.gap-4 { gap: 4px; } .gap-6 { gap: 6px; } .gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; } .gap-16 { gap: 16px; } .gap-20 { gap: 20px; }
+.gap-24 { gap: 24px; } .gap-32 { gap: 32px; }
+.between { justify-content: space-between; }
+.center { align-items: center; justify-content: center; }
+.wrap { flex-wrap: wrap; }
+.grow { flex: 1 1 auto; min-width: 0; }
+.hidden { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.mt-4 { margin-top: 4px; } .mt-8 { margin-top: 8px; } .mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; } .mt-32 { margin-top: 32px; }
+.mb-4 { margin-bottom: 4px; } .mb-8 { margin-bottom: 8px; } .mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; } .mb-24 { margin-bottom: 24px; }
+
+/* ---------- 动效 ---------- */
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop { 0% { transform: scale(.9); opacity: 0; } 60% { transform: scale(1.03); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes shimmer { 0% { background-position: -140% 0; } 100% { background-position: 240% 0; } }
+@keyframes float-y { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(210,72,28,.42); } 70% { box-shadow: 0 0 0 16px rgba(210,72,28,0); } 100% { box-shadow: 0 0 0 0 rgba(210,72,28,0); } }
+@keyframes bar-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.anim-rise { animation: rise .5s var(--ease) both; }
+.stagger > * { animation: rise .55s var(--ease) both; }
+.stagger > *:nth-child(1) { animation-delay: .04s; }
+.stagger > *:nth-child(2) { animation-delay: .10s; }
+.stagger > *:nth-child(3) { animation-delay: .16s; }
+.stagger > *:nth-child(4) { animation-delay: .22s; }
+.stagger > *:nth-child(5) { animation-delay: .28s; }
+.stagger > *:nth-child(6) { animation-delay: .34s; }
+.stagger > *:nth-child(7) { animation-delay: .40s; }
+.stagger > *:nth-child(8) { animation-delay: .46s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
