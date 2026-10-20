@@ -2,8 +2,9 @@
    app — 应用装配：外壳渲染、路由表、会话守卫
    ========================================================================== */
 
+import './config.js';                                    // 确保 supabaseEnabled 已初始化
 import { esc, icon, qs, qsa, initials } from './core/dom.js';
-import { subscribe } from './core/store.js';
+import { subscribe, hydrate } from './core/store.js';
 import { register, setNotFound, start, go, parse, resolve } from './core/router.js';
 import { ensureSeedUsers, currentUser, setTargetLang, isLoggedIn } from './services/auth.js';
 import { getStats, getProgress } from './services/progress.js';
@@ -32,10 +33,12 @@ const NAV = [
 ];
 
 /* ------------------------------ 启动 ------------------------------ */
-ensureSeedUsers();
-community.ensureSeeded();
-
-register('/', () => renderPublic(landing));
+(async function boot() {
+  await hydrate();                         // 云端会话恢复（无配置或无 token 时立即返回）
+  ensureSeedUsers();
+  community.ensureSeeded();
+  start();
+})();
 register('/auth', () => renderPublic(auth));
 register('/learn', () => renderApp(dashboard, { nav: '/learn' }));
 register('/courses', () => renderApp(courses, { nav: '/courses' }));

@@ -11,6 +11,8 @@ import { getProgress, refreshAchievements, getStats } from '../services/progress
 import { LANGUAGES, getLanguage } from '../data/courses.js';
 import { toast } from '../core/ui.js';
 import { announce } from './lesson.js';
+import { supabaseEnabled } from '../config.js';
+import { createPost as sbCreate, likePost as sbLike } from '../services/supabase.js';
 
 let tab = 'feed';
 let filterLang = 'all';
@@ -265,21 +267,26 @@ export function mount(root, ctx = {}) {
       });
     }));
 
-    qs('#publish', body)?.addEventListener('click', () => {
+    qs('#publish', body)?.addEventListener('click', async () => {
       const text = qs('#post-text', body).value.trim();
       if (text.length < 4) { toast('写点什么再发布吧（至少 4 个字）', 'warn'); return; }
+
+      let postId = uid('post');
+      const sbPayload = {
+        authorId: user.id, authorName: user.name,
+        lang: mem.postLang, type: '打卡', content: text,
+        tags: ['打卡'],
+      };
+      if (supabaseEnabled && user.remote) {
+        const r = await sbCreate(sbPayload).catch(() => null);
+        if (r?.ok && r.data?.[0]?.id) postId = r.data[0].id;  // 用 Supabase 分配的 UUID
+      }
+
       const post = {
-        id: uid('post'),
-        authorId: user.id,
-        author: user.name,
-        accent: user.accent,
-        lang: mem.postLang,
-        tag: '打卡',
-        text,
-        createdAt: Date.now(),
-        likes: 0,
-        likedBy: [],
-        replies: [],
+        id: postId,
+        authorId: user.id, author: user.name, accent: user.accent,
+        lang: mem.postLang, tag: '打卡', text,
+        createdAt: Date.now(), likes: 0, likedBy: [], replies: [],
       };
       update((d) => { d.posts.unshift(post); });
       toast('发布成功，+5 XP', 'ok');
@@ -289,13 +296,17 @@ export function mount(root, ctx = {}) {
 
     qsa('[data-like]', body).forEach((b) => b.addEventListener('click', () => {
       const id = b.dataset.like;
+      let delta = 0;
       update((d) => {
         const p = d.posts.find((x) => x.id === id);
         if (!p) return;
         const idx = p.likedBy.indexOf(user.id);
-        if (idx >= 0) { p.likedBy.splice(idx, 1); p.likes = Math.max(0, p.likes - 1); }
-        else { p.likedBy.push(user.id); p.likes += 1; }
+        if (idx >= 0) { p.likedBy.splice(idx, 1); p.likes = Math.max(0, p.likes - 1); delta = -1; }
+        else { p.likedBy.push(user.id); p.likes += 1; delta = +1; }
       });
+      if (supabaseEnabled && user.remote && delta) {
+        sbLike(id, delta).catch(() => {});   // 静默：网络差或 post 不存在都不影响本地
+      }
       paint();
     }));
 

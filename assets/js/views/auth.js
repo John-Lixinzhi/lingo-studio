@@ -189,7 +189,7 @@ function bindForm(root, host) {
     if (input) input.classList.toggle('invalid', !!msg);
   };
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
     const errors = validate(tab === 'register'
@@ -204,15 +204,25 @@ function bindForm(root, host) {
       return;
     }
 
-    if (tab === 'login') {
-      const res = login(data);
-      if (!res.ok) { setErr('pass', res.error); toast(res.error, 'err'); return; }
-      toast(`欢迎回来，${res.user.name}`, 'ok');
-    } else {
-      const res = register({ ...data, target: pickedLang });
-      if (!res.ok) { setErr('email', res.error); toast(res.error, 'err'); return; }
-      toast('注册成功，学习档案已创建', 'ok');
+    let res;
+    try {
+      if (tab === 'login') {
+        res = await login(data);
+      } else {
+        res = await register({ ...data, target: pickedLang });
+      }
+    } catch (e) {
+      toast('网络异常，请稍后再试', 'err');
+      return;
     }
+
+    if (!res.ok) {
+      const field = tab === 'login' ? 'pass' : 'email';
+      setErr(field, res.error);
+      toast(res.error, 'err');
+      return;
+    }
+    toast(tab === 'login' ? `欢迎回来，${res.user.name}` : '注册成功，学习档案已创建', 'ok');
     go('/learn');
   });
 }
