@@ -26,7 +26,6 @@ export function toast(message, kind = 'info', ms = 2600) {
 
 /** 弹窗，返回关闭函数 */
 export function modal({ title, body, actions = [], width }) {
-  console.log('[ui.modal debug] v=2024-10-20t1 layer=', !!modalLayer());
   const layer = modalLayer();
   layer.classList.add('on');
   layer.innerHTML = '';
