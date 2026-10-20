@@ -30,13 +30,15 @@ export function modal({ title, body, actions = [], width }) {
   layer.classList.add('on');
   layer.innerHTML = '';
   const box = el(`
-    <div class="modal-scrim"></div>
-    <div class="modal-box" role="dialog" aria-modal="true" ${width ? `style="width:${width}"` : ''}>
-      <button class="icon-btn modal-close" data-close aria-label="关闭">${icon('times', 17)}</button>
-      ${title ? `<h3 class="display-m mb-12">${esc(title)}</h3>` : ''}
-      <div class="modal-body">${body}</div>
-      ${actions.length ? `<div class="row gap-8 mt-24" style="justify-content:flex-end">${actions.map((a, i) =>
-        `<button class="btn ${a.variant || 'btn-ghost'}" data-act="${i}">${a.label}</button>`).join('')}</div>` : ''}
+    <div class="modal-root">
+      <div class="modal-scrim"></div>
+      <div class="modal-box" role="dialog" aria-modal="true" ${width ? `style="width:${width}"` : ''}>
+        <button class="icon-btn modal-close" data-close aria-label="关闭">${icon('times', 17)}</button>
+        ${title ? `<h3 class="display-m mb-12">${esc(title)}</h3>` : ''}
+        <div class="modal-body">${body}</div>
+        ${actions.length ? `<div class="row gap-8 mt-24" style="justify-content:flex-end">${actions.map((a, i) =>
+          `<button class="btn ${a.variant || 'btn-ghost'}" data-act="${i}">${a.label}</button>`).join('')}</div>` : ''}
+      </div>
     </div>`);
 
   const close = () => {
@@ -48,8 +50,7 @@ export function modal({ title, body, actions = [], width }) {
   document.addEventListener('keydown', onKey);
 
   box.querySelector('[data-close]').addEventListener('click', close);
-  const scrim = box.querySelector('.modal-scrim');
-  scrim.addEventListener('click', close);
+  box.querySelector('.modal-scrim').addEventListener('click', close);
   box.querySelectorAll('[data-act]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const act = actions[Number(btn.dataset.act)];
