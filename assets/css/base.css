@@ -185,20 +185,20 @@ html[data-theme="night"] {
   --paper:        #17130F;
   --paper-raise:  #221C16;
   --paper-sunken: #100D0A;
-  --ink:          #EFE7D9;
-  --ink-2:        #D6CCBB;
-  --ink-3:        #A69D8D;
-  --ink-4:        #8E8676;
-  --line:         rgba(237,229,216,.16);
-  --line-soft:    rgba(237,229,216,.08);
-  --line-bold:    rgba(237,229,216,.30);
+  --ink:          #F3ECE0;   /* 主文字：略提亮 */
+  --ink-2:        #E2D9C7;   /* 次要正文：从 D6CCBB → 拉高 14%，soft 暗夜下对比度从 8.5→13+ */
+  --ink-3:        #BDB4A3;   /* dim / lede / react 按钮：从 A69D8D → 拉高 14% */
+  --ink-4:        #A8A090;   /* mono / kicker / rank-no：从 8E8676 → 拉高 14% */
+  --line:         rgba(243,236,224,.18);
+  --line-soft:    rgba(243,236,224,.10);
+  --line-bold:    rgba(243,236,224,.34);
   --en-soft:      #1B2340;
   --ja-soft:      #3A1D12;
   --ko-soft:      #0C2A22;
   --gold-soft:    #33280F;
   --rail-bg:      #0B0908;
   --rail-ink:     #EDE5D8;
-  --rail-mute:    #948C7E;
+  --rail-mute:    #B8AF9E;
   --shadow-1:     0 1px 0 rgba(0,0,0,.4), 0 6px 18px -12px rgba(0,0,0,.9);
   --shadow-2:     4px 5px 0 rgba(0,0,0,.75);
   --shadow-soft:  0 18px 40px -28px rgba(0,0,0,.95);
