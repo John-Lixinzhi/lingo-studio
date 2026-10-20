@@ -34,8 +34,8 @@ const NAV = [
 ];
 
 /* ------------------------------ 路由表 ------------------------------ */
-register('/', () => renderPublic(landing));
-register('/auth', () => renderPublic(auth));
+register('/', (ctx) => renderPublic(landing, ctx));
+register('/auth', (ctx) => renderPublic(auth, ctx));
 register('/learn', () => renderApp(dashboard, { nav: '/learn' }));
 register('/courses', () => renderApp(courses, { nav: '/courses' }));
 register('/courses/:lang', (ctx) => renderApp(courses, { nav: '/courses', ctx }));

@@ -170,14 +170,14 @@ hr { border: none; border-top: 1px solid var(--line); margin: 0; }
 
 /* --- 暖纸主题 · 亮度档位 --- */
 html[data-theme="paper"][data-lum="soft"] {
-  --paper:        #EEE6D7;
-  --paper-raise:  #F6F1E6;
-  --paper-sunken: #E2D8C6;
+  --paper:        #E7DCC6;
+  --paper-raise:  #F1EADB;
+  --paper-sunken: #DACDB4;
 }
 html[data-theme="paper"][data-lum="bright"] {
-  --paper:        #FCF9F2;
-  --paper-raise:  #FFFEFB;
-  --paper-sunken: #F2EBDE;
+  --paper:        #FFFDF6;
+  --paper-raise:  #FFFFFF;
+  --paper-sunken: #F5EFE4;
 }
 
 /* --- 暗夜主题 --- */
@@ -205,10 +205,10 @@ html[data-theme="night"] {
   color-scheme: dark;
 }
 html[data-theme="night"][data-lum="soft"] {
-  --paper: #131110; --paper-raise: #1C1713; --paper-sunken: #0C0A08;
+  --paper: #0D0B09; --paper-raise: #16120E; --paper-sunken: #060504;
 }
 html[data-theme="night"][data-lum="bright"] {
-  --paper: #1E1912; --paper-raise: #2A2319; --paper-sunken: #17130F;
+  --paper: #241E16; --paper-raise: #302819; --paper-sunken: #191410;
 }
 
 /* 纸纹颗粒：暗底改用叠加混合，否则 multiply 会把颗粒吃掉 */
