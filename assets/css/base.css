@@ -160,3 +160,87 @@ hr { border: none; border-top: 1px solid var(--line); margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
+
+/* ==========================================================================
+   外观调节（亮度 · 主题）
+   <html data-theme="paper|night" data-lum="soft|normal|bright">
+   只重定义调色板变量，外加少量「底色固定为深色」的元素反色修正，
+   组件层与视图层无需改动。
+   ========================================================================== */
+
+/* --- 暖纸主题 · 亮度档位 --- */
+html[data-theme="paper"][data-lum="soft"] {
+  --paper:        #EEE6D7;
+  --paper-raise:  #F6F1E6;
+  --paper-sunken: #E2D8C6;
+}
+html[data-theme="paper"][data-lum="bright"] {
+  --paper:        #FCF9F2;
+  --paper-raise:  #FFFEFB;
+  --paper-sunken: #F2EBDE;
+}
+
+/* --- 暗夜主题 --- */
+html[data-theme="night"] {
+  --paper:        #17130F;
+  --paper-raise:  #221C16;
+  --paper-sunken: #100D0A;
+  --ink:          #EFE7D9;
+  --ink-2:        #D6CCBB;
+  --ink-3:        #A69D8D;
+  --ink-4:        #8E8676;
+  --line:         rgba(237,229,216,.16);
+  --line-soft:    rgba(237,229,216,.08);
+  --line-bold:    rgba(237,229,216,.30);
+  --en-soft:      #1B2340;
+  --ja-soft:      #3A1D12;
+  --ko-soft:      #0C2A22;
+  --gold-soft:    #33280F;
+  --rail-bg:      #0B0908;
+  --rail-ink:     #EDE5D8;
+  --rail-mute:    #948C7E;
+  --shadow-1:     0 1px 0 rgba(0,0,0,.4), 0 6px 18px -12px rgba(0,0,0,.9);
+  --shadow-2:     4px 5px 0 rgba(0,0,0,.75);
+  --shadow-soft:  0 18px 40px -28px rgba(0,0,0,.95);
+  color-scheme: dark;
+}
+html[data-theme="night"][data-lum="soft"] {
+  --paper: #131110; --paper-raise: #1C1713; --paper-sunken: #0C0A08;
+}
+html[data-theme="night"][data-lum="bright"] {
+  --paper: #1E1912; --paper-raise: #2A2319; --paper-sunken: #17130F;
+}
+
+/* 纸纹颗粒：暗底改用叠加混合，否则 multiply 会把颗粒吃掉 */
+html[data-theme="night"] body::before { mix-blend-mode: screen; opacity: .26; }
+
+/* 反色修正：以下元素底色恒为深色，浅色主题下拿 --paper 当文字色刚好，
+   暗夜主题下 --paper 也变深，改用 --rail-ink 维持对比度 */
+html[data-theme="night"] .card-ink,
+html[data-theme="night"] .today-goal,
+html[data-theme="night"] .mobile-bar { color: var(--rail-ink); }
+html[data-theme="night"] .brand-mark { background: var(--rail-ink); color: var(--rail-bg); }
+html[data-theme="night"] .hero-title,
+html[data-theme="night"] .hero-lang .nm b,
+html[data-theme="night"] .hero-stat b { color: var(--rail-ink); }
+
+/* 浅色反馈底：暗夜下换成低透明度同色系，避免亮斑 */
+html[data-theme="night"] .opt.wrong,
+html[data-theme="night"] .token-off,
+html[data-theme="night"] .result-banner.poor { background: rgba(192,57,43,.18); }
+html[data-theme="night"] .result-banner.mid { background: rgba(185,138,43,.16); }
+html[data-theme="night"] .result-banner.good { background: rgba(14,128,96,.18); }
+html[data-theme="night"] .grade-btn.g0:hover { background: rgba(192,57,43,.2); }
+html[data-theme="night"] .grade-btn.g1:hover { background: rgba(185,138,43,.18); }
+html[data-theme="night"] .grade-btn.g2:hover { background: rgba(44,79,214,.2); }
+html[data-theme="night"] .chip-gold { color: #E4B54F; }
+html[data-theme="night"] .modal-scrim { background: rgba(0,0,0,.64); }
+
+/* 彩色标签 / 头像：这两类元素底色是饱和色，文字却来自「浅色系变量」，
+   暗夜下浅色变量翻转为深色 → 会变成深字压深底，这里单独把文字提亮 */
+html[data-theme="night"] .chip-en { color: #93A9F7; }
+html[data-theme="night"] .chip-ja { color: #F08A5D; }
+html[data-theme="night"] .chip-ko { color: #4FD3A7; }
+html[data-theme="night"] .avatar-en,
+html[data-theme="night"] .avatar-ja,
+html[data-theme="night"] .avatar-ko { color: #FFF6EA; }

@@ -3,6 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>
+  /* 在首屏绘制前应用外观偏好（主题 + 亮度），避免切换时闪一下白底 */
+  (function () {
+    var el = document.documentElement;
+    try {
+      var p = JSON.parse(localStorage.getItem('lingo_appearance') || '{}');
+      el.dataset.theme = p.theme === 'night' ? 'night' : 'paper';
+      el.dataset.lum = /^(soft|normal|bright)$/.test(p.lum) ? p.lum : 'normal';
+    } catch (e) {
+      el.dataset.theme = 'paper';
+      el.dataset.lum = 'normal';
+    }
+  })();
+</script>
 <title>Lingo Studio · 多语种沉浸式学习平台</title>
 <meta name="description" content="支持英语、日语、韩语的多语种在线学习平台：分级课程、互动练习、进度追踪、个性化路径与社区成就。" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />

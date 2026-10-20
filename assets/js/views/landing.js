@@ -35,9 +35,11 @@ export function render() {
             <b>Lingo Studio</b><span>多语种沉浸式学习</span>
           </div>
         </div>
-        <span class="hero-badge" style="margin:0">
-          <b>BETA</b> 支持英 · 日 · 韩
-        </span>
+        <div class="row gap-12">
+          <span class="hero-badge" style="margin:0"><b>BETA</b> 支持英 · 日 · 韩</span>
+          <button class="icon-btn" data-appearance aria-label="外观与亮度" title="亮度与主题"
+            style="border-color:rgba(255,255,255,.24);color:var(--rail-ink)">${icon('sun', 18)}</button>
+        </div>
       </div>
 
       <div style="margin:auto 0">

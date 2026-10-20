@@ -23,9 +23,13 @@ export function render(ctx = {}) {
           <span style="top:${[12, 66, 30, 80][i]}%;left:${[68, 10, 84, 34][i]}%;font-size:${[150, 120, 96, 130][i]}px">${g}</span>`).join('')}
       </div>
 
-      <div class="brand" style="padding:0">
-        <div class="brand-mark">L</div>
-        <div class="brand-text" style="color:var(--rail-ink)"><b>Lingo Studio</b><span>多语种沉浸式学习</span></div>
+      <div class="row between">
+        <div class="brand" style="padding:0">
+          <div class="brand-mark">L</div>
+          <div class="brand-text" style="color:var(--rail-ink)"><b>Lingo Studio</b><span>多语种沉浸式学习</span></div>
+        </div>
+        <button class="icon-btn" data-appearance aria-label="外观与亮度" title="亮度与主题"
+          style="border-color:rgba(255,255,255,.24);color:var(--rail-ink)">${icon('sun', 18)}</button>
       </div>
 
       <div style="margin:auto 0">

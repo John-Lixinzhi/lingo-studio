@@ -22,6 +22,14 @@ const MODULES = [
 
 const SESSION_SIZE = 8;
 
+/** 语言优先级：URL 参数 → 用户主攻语言 → 兜底英语（render 与 mount 共用，避免两处不一致） */
+function resolveLang(ctx = {}) {
+  const preferred = getProgress()?.activeLang;
+  if (LANGUAGES.some((l) => l.code === ctx.lang)) return ctx.lang;
+  if (LANGUAGES.some((l) => l.code === preferred)) return preferred;
+  return 'en';
+}
+
 /* ------------------------------------------------------------------ */
 export function render(ctx = {}) {
   // #/practice/:type 直接进入对应模块；#/practice 显示模块总览
@@ -122,7 +130,7 @@ function hub() {
 function runner(ctx) {
   const type = ctx.type;
   const meta = MODULES.find((m) => m.type === type) || MODULES[0];
-  const langCode = LANGUAGES.some((l) => l.code === ctx.lang) ? ctx.lang : 'en';
+  const langCode = resolveLang(ctx);
   const l = getLanguage(langCode);
   const isReview = ctx.mode === 'review';
 
@@ -165,7 +173,7 @@ export function mount(root, ctx = {}) {
   const host = qs('#session-host', root);
   if (!host) return;
 
-  const langCode = LANGUAGES.some((l) => l.code === ctx.lang) ? ctx.lang : 'en';
+  const langCode = resolveLang(ctx);
   const l = getLanguage(langCode);
   const type = ctx.type;
   const isReview = ctx.mode === 'review';

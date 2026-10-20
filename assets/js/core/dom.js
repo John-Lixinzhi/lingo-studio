@@ -149,6 +149,7 @@ export const icons = {
   users: S('<circle cx="9" cy="8" r="3.2"/><path d="M2.8 19.5a6.5 6.5 0 0 1 12.4 0"/><path d="M16.5 5.6a3.2 3.2 0 0 1 0 5.4M18 19.5a6.4 6.4 0 0 0-1.4-4"/>'),
   download: S('<path d="M12 4v10M8 11l4 4 4-4"/><path d="M5 19h14"/>'),
   filter: S('<path d="M4 6h16M7 12h10M10 18h4"/>'),
+  sun: S('<circle cx="12" cy="12" r="4"/><path d="M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.4 5.4l1.5 1.5M17.1 17.1l1.5 1.5M18.6 5.4l-1.5 1.5M6.9 17.1l-1.5 1.5"/>'),
 };
 
 export function icon(name, size = 20, cls = '') {

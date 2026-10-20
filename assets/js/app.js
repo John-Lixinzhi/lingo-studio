@@ -10,6 +10,7 @@ import { ensureSeedUsers, currentUser, setTargetLang, isLoggedIn } from './servi
 import { getStats, getProgress } from './services/progress.js';
 import { LANGUAGES, getLanguage } from './data/courses.js';
 import { toast } from './core/ui.js';
+import { openPanel } from './core/appearance.js';
 
 import * as landing from './views/landing.js';
 import * as auth from './views/auth.js';
@@ -32,13 +33,8 @@ const NAV = [
   { path: '/profile', label: '我的', icon: 'user', title: '个人中心', crumb: 'Profile' },
 ];
 
-/* ------------------------------ 启动 ------------------------------ */
-(async function boot() {
-  await hydrate();                         // 云端会话恢复（无配置或无 token 时立即返回）
-  ensureSeedUsers();
-  community.ensureSeeded();
-  start();
-})();
+/* ------------------------------ 路由表 ------------------------------ */
+register('/', () => renderPublic(landing));
 register('/auth', () => renderPublic(auth));
 register('/learn', () => renderApp(dashboard, { nav: '/learn' }));
 register('/courses', () => renderApp(courses, { nav: '/courses' }));
@@ -86,6 +82,8 @@ function shell({ user, stats, active, crumb }) {
     <b style="font-family:var(--font-display);font-size:1rem">Lingo Studio</b>
     <div class="grow"></div>
     <span class="chip chip-${lang.accent}">${esc(lang.label)}</span>
+    <button class="icon-btn" data-appearance aria-label="外观与亮度" title="亮度与主题"
+      style="border-color:rgba(255,255,255,.22);color:var(--rail-ink)">${icon('sun', 18)}</button>
   </div>
 
   <div class="shell">
@@ -132,6 +130,7 @@ function shell({ user, stats, active, crumb }) {
         <div class="row gap-8">
           <span class="chip chip-plain" title="今日获得的经验值">${icon('bolt', 13)} <span id="topbar-xp">${stats?.todayXp || 0}</span> XP</span>
           <span class="chip chip-plain" title="连续学习天数">${icon('flame', 13)} ${stats?.streak || 0}</span>
+          <button class="icon-btn" data-appearance aria-label="外观与亮度" title="亮度与主题">${icon('sun', 17)}</button>
         </div>
       </header>
 
@@ -179,6 +178,14 @@ function refreshCurrentView() {
   else location.hash = target;
 }
 
+/* 外观面板入口：顶栏 / 手机栏 / 落地页 / 登录页上的 [data-appearance] 按钮统一走委托绑定 */
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest && e.target.closest('[data-appearance]');
+  if (!btn) return;
+  e.preventDefault();
+  openPanel();
+});
+
 /* 顶部数字实时刷新（不重建 DOM，避免打断正在进行的练习） */
 subscribe(() => {
   const stats = getStats();
@@ -193,4 +200,11 @@ subscribe(() => {
   if (badge && stats.dueCount > 0) badge.textContent = stats.dueCount;
 });
 
-start();
+/* ------------------------------ 启动 ------------------------------ */
+(async function boot() {
+  ensureSeedUsers();          // 播种演示账号，让榜单与社区不至于空白
+  community.ensureSeeded();
+  start();                    // 注册 hashchange 监听并立即渲染一次
+  await hydrate();            // 存在云端会话时恢复登录态（无配置/无 token 立即返回）
+  resolve();                  // 恢复后重渲染，让已登录用户进入应用内页
+})();
